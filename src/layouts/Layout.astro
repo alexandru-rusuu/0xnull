@@ -1,0 +1,65 @@
+---
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  route?: string;
+}
+
+const {
+  title = "0xNULL // Portfolio v3.0",
+  description = "A next-gen terminal-based portfolio — cyberpunk OS interface with 3D spatial computing.",
+  route = "/",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+
+  <body class="bg-void-bg text-void-text font-mono overflow-hidden">
+    <!--
+      Layer stack (bottom → top):
+      1. Three.js Canvas — 3D background scene
+      2. Grid overlay — subtle grid lines
+      3. Main content — terminal UI
+      4. CRT scanline overlay — retro TV effect
+    -->
+
+    <div id="three-root" class="fixed inset-0 z-0" data-route={route}></div>
+
+    <div class="fixed inset-0 z-[1] grid-bg pointer-events-none"></div>
+
+    <main
+      id="shell-main"
+      class="relative z-10 h-screen w-screen flex items-center justify-center p-4 md:p-8"
+      data-route={route}
+    >
+      <slot />
+    </main>
+
+    <div class="crt-overlay"></div>
+
+    <script define:vars={{ route }}>
+      window.__OXNULL_ROUTE__ = route;
+    </script>
+  </body>
+</html>
