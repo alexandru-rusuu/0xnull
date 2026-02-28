@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://0xnull.dev",
@@ -8,12 +8,10 @@ export default defineConfig({
 
   integrations: [
     react(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
   ],
 
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal: ["three", "@react-three/fiber", "@react-three/drei"],
     },

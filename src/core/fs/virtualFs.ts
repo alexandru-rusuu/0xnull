@@ -36,10 +36,8 @@ Run \`cd projects && ls\` to browse the portfolio.`,
       content: `# SECURE COMM CHANNELS
 
 ╔══════════════════════════════════════╗
-║  EMAIL    → hello@0xnull.dev  ║
-║  GITHUB   → github.com/0xnull-dev  ║
-║  LINKEDIN → linkedin.com/in/0xnull ║
-║  TWITTER  → @0xnull_dev           ║
+║  EMAIL    → alexrusu795@gmail.com     ║
+║  GITHUB   → github.com/alexandru-rusuu ║
 ╚══════════════════════════════════════╝
 
 Or leave a message in the \`guestbook\`.`,
