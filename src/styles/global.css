@@ -4,6 +4,19 @@
 
 @layer base {
 
+  :root {
+    --theme-bg: #0a0a0f;
+    --theme-surface: #12121a;
+    --theme-border: #1e1e2e;
+    --theme-text: #c8c8d4;
+    --theme-dim: #5a5a72;
+    --theme-primary: #00f0ff;
+    --theme-secondary: #ff00aa;
+    --theme-accent: #bf5fff;
+    --theme-success: #39ff14;
+    --theme-warning: #ffbf00;
+  }
+
   *,
   *::before,
   *::after {
@@ -20,15 +33,18 @@
   }
 
   body {
-    @apply bg-void-bg text-void-text font-mono;
+    background: var(--theme-bg);
+    color: var(--theme-text);
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
     overflow: hidden;
     height: 100vh;
     width: 100vw;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
   ::selection {
     background: rgba(0, 240, 255, 0.25);
-    color: #00f0ff;
+    color: var(--theme-primary);
   }
 
   ::-webkit-scrollbar {
@@ -40,12 +56,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 240, 255, 0.2);
+    background: color-mix(in srgb, var(--theme-primary) 20%, transparent);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 240, 255, 0.4);
+    background: color-mix(in srgb, var(--theme-primary) 40%, transparent);
   }
 }
 
@@ -81,7 +97,7 @@
   }
 
   .glass-panel {
-    background: rgba(18, 18, 26, 0.75);
+    background: color-mix(in srgb, var(--theme-surface) 75%, transparent);
     backdrop-filter: blur(16px) saturate(1.2);
     -webkit-backdrop-filter: blur(16px) saturate(1.2);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -91,44 +107,45 @@
   }
 
   .neon-cyan {
-    color: #00f0ff;
+    color: var(--theme-primary);
     text-shadow:
-      0 0 4px #00f0ff,
-      0 0 12px rgba(0, 240, 255, 0.5);
+      0 0 4px var(--theme-primary),
+      0 0 12px color-mix(in srgb, var(--theme-primary) 50%, transparent);
   }
 
   .neon-green {
-    color: #39ff14;
+    color: var(--theme-success);
     text-shadow:
-      0 0 4px #39ff14,
-      0 0 12px rgba(57, 255, 20, 0.5);
+      0 0 4px var(--theme-success),
+      0 0 12px color-mix(in srgb, var(--theme-success) 50%, transparent);
   }
 
   .neon-magenta {
-    color: #ff00aa;
+    color: var(--theme-secondary);
     text-shadow:
-      0 0 4px #ff00aa,
-      0 0 12px rgba(255, 0, 170, 0.5);
+      0 0 4px var(--theme-secondary),
+      0 0 12px color-mix(in srgb, var(--theme-secondary) 50%, transparent);
   }
 
   .neon-amber {
-    color: #ffbf00;
+    color: var(--theme-warning);
     text-shadow:
-      0 0 4px #ffbf00,
-      0 0 12px rgba(255, 191, 0, 0.5);
+      0 0 4px var(--theme-warning),
+      0 0 12px color-mix(in srgb, var(--theme-warning) 50%, transparent);
   }
 
   .terminal-chrome {
     @apply rounded-lg overflow-hidden;
-    background: rgba(18, 18, 26, 0.75);
+    background: color-mix(in srgb, var(--theme-surface) 75%, transparent);
     backdrop-filter: blur(16px) saturate(1.2);
     -webkit-backdrop-filter: blur(16px) saturate(1.2);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-color: rgba(0, 240, 255, 0.1);
+    border-color: color-mix(in srgb, var(--theme-primary) 10%, transparent);
     box-shadow:
-      0 0 1px rgba(0, 240, 255, 0.3),
+      0 0 1px color-mix(in srgb, var(--theme-primary) 30%, transparent),
       0 8px 40px rgba(0, 0, 0, 0.6),
-      inset 0 1px 0 rgba(0, 240, 255, 0.05);
+      inset 0 1px 0 color-mix(in srgb, var(--theme-primary) 5%, transparent);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .terminal-titlebar {
@@ -142,15 +159,16 @@
   }
 
   .terminal-cursor {
-    @apply inline-block w-[0.6em] h-[1.1em] bg-neon-cyan ml-0.5;
+    @apply inline-block w-[0.6em] h-[1.1em] ml-0.5;
+    background: var(--theme-primary);
     animation: blink 1s step-end infinite;
     vertical-align: text-bottom;
   }
 
   .grid-bg {
     background-image:
-      linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(color-mix(in srgb, var(--theme-primary) 3%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--theme-primary) 3%, transparent) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 }

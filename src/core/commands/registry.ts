@@ -10,6 +10,19 @@ import { skillsCommand } from "./skills";
 import { neofetchCommand } from "./neofetch";
 import { historyCommand } from "./history";
 import { echoCommand } from "./echo";
+import { pwdCommand } from "./pwd";
+import { dateCommand } from "./date";
+import { treeCommand } from "./tree";
+import { grepCommand } from "./grep";
+import { openCommand } from "./open";
+import { manCommand } from "./man";
+import { sudoCommand } from "./sudo";
+import { fortuneCommand } from "./fortune";
+import { guestbookCommand } from "./guestbook";
+import { weatherCommand } from "./weather";
+import { matrixCommand } from "./matrix";
+import { exportCommand } from "./export";
+import { themeCommand } from "./theme";
 
 class CommandRegistry {
   private commands = new Map<string, CommandDefinition>();
@@ -48,13 +61,33 @@ class CommandRegistry {
 
 export const commandRegistry = new CommandRegistry();
 
-commandRegistry.register(helpCommand);
+// Navigation & filesystem
 commandRegistry.register(lsCommand);
 commandRegistry.register(cdCommand);
 commandRegistry.register(catCommand);
-commandRegistry.register(clearCommand);
+commandRegistry.register(pwdCommand);
+commandRegistry.register(treeCommand);
+commandRegistry.register(grepCommand);
+commandRegistry.register(openCommand);
+
+// Info & profile
+commandRegistry.register(helpCommand);
+commandRegistry.register(manCommand);
 commandRegistry.register(whoamiCommand);
 commandRegistry.register(skillsCommand);
 commandRegistry.register(neofetchCommand);
+commandRegistry.register(dateCommand);
+
+// Utility
+commandRegistry.register(clearCommand);
 commandRegistry.register(historyCommand);
 commandRegistry.register(echoCommand);
+commandRegistry.register(exportCommand);
+commandRegistry.register(themeCommand);
+
+// Interactive & fun
+commandRegistry.register(weatherCommand);
+commandRegistry.register(guestbookCommand);
+commandRegistry.register(fortuneCommand);
+commandRegistry.register(matrixCommand);
+commandRegistry.register(sudoCommand);

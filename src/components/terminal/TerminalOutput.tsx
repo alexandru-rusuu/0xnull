@@ -15,6 +15,34 @@ const LINE_STYLES: Record<LineType, { color: string; prefix: string }> = {
   blank:   { color: "transparent", prefix: "" },
 };
 
+const URL_REGEX = /(https?:\/\/[^\s)>]+)/g;
+
+function renderContentWithLinks(content: string, baseColor: string): React.ReactNode {
+  const parts = content.split(URL_REGEX);
+  if (parts.length === 1) return content;
+
+  return parts.map((part, i) => {
+    if (URL_REGEX.test(part)) {
+      // Reset regex lastIndex
+      URL_REGEX.lastIndex = 0;
+      return (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-dotted underline-offset-2 hover:brightness-125 transition-all cursor-pointer"
+          style={{ color: "#bf5fff" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {part}
+        </a>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 const LineRow: React.FC<{ line: TerminalLine; index: number }> = ({
   line,
   index,
@@ -40,7 +68,11 @@ const LineRow: React.FC<{ line: TerminalLine; index: number }> = ({
       {style.prefix && (
         <span className="opacity-60">{style.prefix}</span>
       )}
-      {line.content}
+      {line.isHtml ? (
+        <span dangerouslySetInnerHTML={{ __html: line.content }} />
+      ) : (
+        renderContentWithLinks(line.content, color)
+      )}
     </motion.div>
   );
 };

@@ -3,12 +3,18 @@ import { NullScene } from "@/components/three/NullScene";
 import { TerminalWindow, BootSequence } from "@/components/terminal";
 import { GhostLogger } from "@/components/ghost/GhostLogger";
 import { executeDeepLink } from "@/core/engine/interpreter";
+import { loadSavedTheme } from "@/core/commands/theme";
 
 interface AppShellProps {
   route?: string;
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ route = "/" }) => {
+  useEffect(() => {
+    // Load saved theme on mount
+    loadSavedTheme();
+  }, []);
+
   useEffect(() => {
     if (route && route !== "/") {
       const timer = setTimeout(() => {

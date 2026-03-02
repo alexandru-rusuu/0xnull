@@ -16,13 +16,15 @@ const BOOT_ASCII = [
 const BOOT_MESSAGES = [
   { content: "  [BOOT] Initializing 0xNULL kernel...",         color: "#5a5a72" },
   { content: "  [BOOT] Loading virtual filesystem... OK",      color: "#5a5a72" },
+  { content: "  [BOOT] Mounting 23 commands... READY",         color: "#5a5a72" },
   { content: "  [BOOT] Three.js spatial engine... ONLINE",     color: "#5a5a72" },
   { content: "  [BOOT] CRT filter overlay... ACTIVE",          color: "#5a5a72" },
-  { content: "  [BOOT] Neural autocomplete... STANDBY",        color: "#5a5a72" },
+  { content: "  [BOOT] Tab autocomplete... ENABLED",           color: "#5a5a72" },
+  { content: "  [BOOT] Theme engine... LOADED",                color: "#5a5a72" },
   { content: "  [BOOT] Ghost logger... MONITORING",            color: "#5a5a72" },
   { content: "",                                                color: undefined },
   { content: '  Welcome to 0xNULL. Type "help" to begin.', color: "#00f0ff" },
-  { content: '  Navigate with ls, cd, cat. Try "neofetch".',    color: "#ffbf00" },
+  { content: '  Try: neofetch, tree ~, weather, theme matrix',  color: "#ffbf00" },
   { content: "",                                                color: undefined },
 ];
 

@@ -2,10 +2,36 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useTerminalStore } from "@/core/engine/store";
 import { executeCommand } from "@/core/engine/interpreter";
 import { commandRegistry } from "@/core/commands/registry";
+import { listDir, resolvePath } from "@/core/fs";
+
+function getPathCompletions(input: string, cwd: string): string[] {
+  const tokens = input.split(/\s+/);
+  if (tokens.length < 2) return [];
+
+  const partial = tokens[tokens.length - 1] ?? "";
+  const lastSlash = partial.lastIndexOf("/");
+  const dirPart = lastSlash >= 0 ? partial.slice(0, lastSlash) : "";
+  const prefix = lastSlash >= 0 ? partial.slice(lastSlash + 1) : partial;
+
+  const searchDir = dirPart ? resolvePath(cwd, dirPart) : cwd;
+  const children = listDir(searchDir);
+  if (!children) return [];
+
+  const matches = children
+    .filter((c) => c.name.toLowerCase().startsWith(prefix.toLowerCase()))
+    .map((c) => {
+      const fullName = dirPart ? `${dirPart}/${c.name}` : c.name;
+      return c.type === "dir" ? `${fullName}/` : fullName;
+    });
+
+  return matches;
+}
 
 export const TerminalInput: React.FC = () => {
   const [value, setValue] = useState("");
   const [suggestion, setSuggestion] = useState("");
+  const [tabCompletions, setTabCompletions] = useState<string[]>([]);
+  const [tabIndex, setTabIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const cwd = useTerminalStore((s) => s.cwd);
@@ -30,12 +56,27 @@ export const TerminalInput: React.FC = () => {
       return;
     }
 
-    const allNames = commandRegistry.getNames();
-    const match = allNames.find((n) =>
-      n.startsWith(value.trim().toLowerCase()),
-    );
-    setSuggestion(match && match !== value.trim().toLowerCase() ? match : "");
-  }, [value]);
+    const trimmed = value.trim().toLowerCase();
+    const tokens = trimmed.split(/\s+/);
+
+    // If single token, autocomplete command names
+    if (tokens.length === 1) {
+      const allNames = commandRegistry.getNames();
+      const match = allNames.find((n) => n.startsWith(trimmed));
+      setSuggestion(match && match !== trimmed ? match : "");
+      return;
+    }
+
+    // If multiple tokens, autocomplete file paths
+    const partial = tokens[tokens.length - 1] ?? "";
+    const completions = getPathCompletions(value.trim(), cwd);
+    if (completions.length === 1) {
+      const baseCmd = tokens.slice(0, -1).join(" ");
+      setSuggestion(`${baseCmd} ${completions[0]}`);
+    } else {
+      setSuggestion("");
+    }
+  }, [value, cwd]);
 
   const handleSubmit = useCallback(async () => {
     if (isProcessing) return;
@@ -57,10 +98,36 @@ export const TerminalInput: React.FC = () => {
 
       if (e.key === "Tab") {
         e.preventDefault();
-        if (suggestion) {
-          setValue(suggestion);
-          setSuggestion("");
+
+        // Single token: autocomplete command
+        const tokens = value.trim().split(/\s+/);
+        if (tokens.length <= 1) {
+          if (suggestion) {
+            setValue(suggestion + " ");
+            setSuggestion("");
+          }
+          return;
         }
+
+        // Multi-token: cycle through file path completions
+        const completions = getPathCompletions(value.trim(), cwd);
+        if (completions.length === 0) return;
+
+        if (completions.length === 1) {
+          const baseCmd = tokens.slice(0, -1).join(" ");
+          setValue(`${baseCmd} ${completions[0]}`);
+          setSuggestion("");
+          setTabCompletions([]);
+          setTabIndex(-1);
+          return;
+        }
+
+        // Multiple matches: cycle through them
+        const nextIndex = (tabIndex + 1) % completions.length;
+        setTabIndex(nextIndex);
+        setTabCompletions(completions);
+        const baseCmd = tokens.slice(0, -1).join(" ");
+        setValue(`${baseCmd} ${completions[nextIndex]}`);
         return;
       }
 
